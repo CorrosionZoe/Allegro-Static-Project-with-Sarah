@@ -1,0 +1,74 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Allegro Static (w64devkit)",
+            "type": "shell",
+            // 确保这里指向你的 w64devkit 中的 g++ 完整路径
+            "command": "D:/Computer_Science/w64devkit/bin/g++.exe",
+            
+            "args": [
+                // 1. 编译选项：开启调试信息，静态链接标志
+                "-g",
+                "-static",
+                
+                // 2. 静态链接宏定义：告知 Allegro 头文件使用静态库
+                // 必须在编译阶段传入宏定义
+                "-D", "ALLEGRO_STATICLINK",
+                
+                // 3. 源代码文件
+                "${file}", 
+                
+                // 4. 包含路径 (-I) 和库路径 (-L)
+                "-I", 
+                "D:/Computer_Science/Allegro/include", // 替换为你的 <YOUR_ALLEGRO_ROOT>/include
+                "-L", 
+                "D:/Computer_Science/Allegro/lib",     // 替换为你的 <YOUR_ALLEGRO_ROOT>/lib
+
+                // 5. Allegro 库链接：注意顺序，依赖者在前
+                // 你的 Allegro 插件
+                "-lallegro_font-static",
+                "-lallegro_primitives-static",
+                "-lallegro_image-static",
+                "-lallegro_color-static",
+                "-lallegro_ttf-static",
+                "-lallegro_audio-static",
+                "-lallegro_acodec-static",
+                "-lallegro_video-static",
+                "-lallegro_dialog-static",
+                "-lallegro_physfs-static",
+                "-lallegro_memfile-static",
+                // 核心 Allegro 库
+                "-lallegro-static",
+                
+                "-lshlwapi",  // 解决 PathFindOnPathW 缺失
+                "-lole32",
+                
+                // 6. Windows 系统依赖库：静态链接时必须手动添加
+                "-lws2_32",
+                "-lpsapi",
+                "-lopengl32",
+                "-lwinmm",
+                "-luser32",
+                "-lgdi32",
+                "-lkernel32",
+                
+                // 7. 输出文件
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                // 确保 VS Code 终端使用 w64devkit 的 g++ (如果它不在系统 PATH 中)
+                "env": {
+                    // 如果你的 w64devkit/bin 不在系统 PATH 中，需要在这里临时添加
+                    "PATH": "D:/Computer_Science/w64devkit/bin" // 替换为你的 w64devkit/bin 路径
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "使用 w64devkit 进行 Allegro 静态链接编译"
+        }
+    ]
+}

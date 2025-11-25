@@ -1,0 +1,17 @@
+# Compiled Executables
+*.exe
+*.out
+
+# Object files and debugging info
+*.o
+*.obj
+*.pdb
+
+# VS Code settings (optional, only ignore user-specific settings)
+.vscode/settings.json
+.vscode/launch.json
+
+# Ignore the large static library files themselves (if you choose not to share them)
+# If you share the Allegro library files (as .a), DO NOT ignore them here.
+# If you expect everyone to download Allegro themselves, you can ignore the whole lib folder:
+# D:/Computer_Science/Allegro/lib
