@@ -42,7 +42,12 @@
                 "-lallegro-static",
                 
                 "-lshlwapi",  // 解决 PathFindOnPathW 缺失
-                "-lole32",
+                "-lole32",//（或频繁使用，视版本/包而定）
+                "-lpng16",
+                "-ljpeg",
+                "-lwebp",
+                "-lzlib",
+                "-lsharpyuv",
                 
                 // 6. Windows 系统依赖库：静态链接时必须手动添加
                 "-lws2_32",
@@ -53,11 +58,6 @@
                 "-lgdi32",
                 "-lkernel32",
                 "-lcomdlg32",
-                "-lpng",//（或频繁使用，视版本/包而定）
-                "-lpng16",
-                "-ljpeg",
-                "-lwebp",
-                "-lz",
                 
                 // 7. 输出文件
                 "-o",
