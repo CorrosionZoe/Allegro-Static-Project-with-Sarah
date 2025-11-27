@@ -52,6 +52,12 @@
                 "-luser32",
                 "-lgdi32",
                 "-lkernel32",
+                "-lcomdlg32",
+                "-lpng",//（或频繁使用，视版本/包而定）
+                "-lpng16",
+                "-ljpeg",
+                "-lwebp",
+                "-lz",
                 
                 // 7. 输出文件
                 "-o",
