@@ -17,11 +17,16 @@
                 "-D", "ALLEGRO_STATICLINK",
                 
                 // 3. 源代码文件
-                "${file}", 
+                // 编译所有实现文件！
+                "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/main.cpp",
+                // 假设 ERROR 函数的实现在这里：
+                "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/allegro.cpp",
                 
                 // 4. 包含路径 (-I) 和库路径 (-L)
                 "-I", 
                 "D:/Computer_Science/Allegro/include", // 替换为你的 <YOUR_ALLEGRO_ROOT>/include
+                "-I",
+                "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/Headers",
                 "-L", 
                 "D:/Computer_Science/Allegro/lib",     // 替换为你的 <YOUR_ALLEGRO_ROOT>/lib
 
