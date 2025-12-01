@@ -21,6 +21,7 @@
                 "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/main.cpp",
                 // 假设 ERROR 函数的实现在这里：
                 "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/allegro.cpp",
+                "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/image.cpp",
                 
                 // 4. 包含路径 (-I) 和库路径 (-L)
                 "-I", 
@@ -51,8 +52,9 @@
                 "-lpng16",
                 "-ljpeg",
                 "-lwebp",
-                "-lzlib",
                 "-lsharpyuv",
+                "-lfreetype",
+                "-lzlib",
                 
                 // 6. Windows 系统依赖库：静态链接时必须手动添加
                 "-lws2_32",
