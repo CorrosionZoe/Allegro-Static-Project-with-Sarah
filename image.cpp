@@ -14,11 +14,11 @@ void scale_image(ALLEGRO_BITMAP *image){
 	);
 }
 
-void animation(ALLEGRO_BITMAP * frame[]){
-    char Cube[FILE_NAME];
-    for(int i = 0; i< aFPS; i++){
-        snprintf(Cube, FILE_NAME, "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/Animation/Cube/c %d.png", i);
-        frame[i] = al_load_bitmap(Cube);
+void animation(Animation ob[], int number){
+    char location[FILE_NAME];
+    for(int i = 0; i< ob[number].aFPS; i++){
+        snprintf(location, FILE_NAME, "Animation/%s/%d.png", ob[number].name, i);
+        ob[number].frame[i] = al_load_bitmap(location);
     }
 }
 
@@ -36,4 +36,12 @@ void text(ALLEGRO_FONT* font){
     al_rest(1);
     al_draw_text(font, pink, SCREEN_W/2, (300), ALLEGRO_ALIGN_CENTRE, "When you are part of a team");
     al_flip_display();
+}
+
+void loading_image(Animation ob[], int number){
+    for (int i = 0; i < 4; i++){
+        for(int j = 0; j< 4; j++){
+            ob[number].frame[i *4 + j] = al_create_sub_bitmap(ob[number].image, j* 75, i *75, 75, 75);
+        }
+    }
 }

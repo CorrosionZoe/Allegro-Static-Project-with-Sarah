@@ -1,6 +1,6 @@
 #include "winter.h"
 
-int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer, ALLEGRO_FONT* font, ALLEGRO_BITMAP *image){
+int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer, ALLEGRO_FONT* font, Animation ob[]){
     //AL
     if(!disp){
         al_show_native_message_box(disp, "Error", "EEE404", "Fail to display", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
@@ -17,7 +17,7 @@ int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer
                                     nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       return -1;
     }
-    if (!image) {
+    if (!ob[1].image) {
 		al_show_native_message_box(disp, "Error", "Error", "Failed to load image!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	al_destroy_display(disp);
@@ -51,3 +51,13 @@ int addonCheck(ALLEGRO_DISPLAY *disp){
     return 0;
 }
 
+void STORE_struct(Animation ob[]){
+    ob[0] = {6, "Cube"};
+    ob[1] = {16, "Diamond"};
+    ob[1].image = al_load_bitmap("Block_of_Diamond.png");
+}
+
+void STORE_frame(Animation ob[], int number){
+    int store = ob[number].aFPS;
+    ob[number].frame = (ALLEGRO_BITMAP**)malloc(store * sizeof(ALLEGRO_BITMAP*));
+}
