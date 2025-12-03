@@ -51,13 +51,34 @@ int addonCheck(ALLEGRO_DISPLAY *disp){
     return 0;
 }
 
-void STORE_struct(Animation ob[]){
-    ob[0] = {6, "Cube"};
-    ob[1] = {16, "Diamond"};
-    ob[1].image = al_load_bitmap("Block_of_Diamond.png");
-}
-
-void STORE_frame(Animation ob[], int number){
+void ARRAY_frame(Animation ob[], int number){
     int store = ob[number].aFPS;
     ob[number].frame = (ALLEGRO_BITMAP**)malloc(store * sizeof(ALLEGRO_BITMAP*));
 }
+
+void STORE_struct(Animation ob[]){
+    //0
+    ob[0].aFPS = 6;
+    strcpy(ob[0].name, "Cube");
+    ob[0].frame = NULL;
+    //1
+    ob[1].aFPS = 16;
+    strcpy(ob[1].name, "Diamond");
+    ob[1].frame = NULL;
+    ob[1].image = NULL;
+    ob[1].image = al_load_bitmap("Image/Block_of_Diamond.png");
+    //2
+    ob[2].aFPS = 16;
+    ob[2].frame = NULL;
+    ob[2].image = NULL;
+    ob[2].image = al_load_bitmap("Image/runningMotion.png");
+    //Game Begin: 3 ----- Background
+    ob[3].image = NULL;
+    strcpy(ob[3].name, "Snow_Background");
+    ob[3].image = al_load_bitmap("Image/R.jpeg");
+    //4 ----- Cat
+    ob[4].aFPS = 6;
+    
+}
+
+

@@ -1,15 +1,15 @@
 #include "winter.h"
 
 
-void scale_image(ALLEGRO_BITMAP *image){
-    float original_width = al_get_bitmap_width(image); // 假设是 100
-	float original_height = al_get_bitmap_height(image); // 假设是 100
+void scale_image(Animation ob[], int number){
+    float original_width = al_get_bitmap_width(ob[number].image); // 假设是 100
+	float original_height = al_get_bitmap_height(ob[number].image); // 假设是 100
 
 	// 将图片缩小 50% (从 100x100 缩放到 50x50)，并绘制到 (100, 100)
 	al_draw_scaled_bitmap(
-    	image, 
+    	ob[number].image, 
     	0, 0, original_width, original_height, // 绘制整个源图片
-    	100, 100, 500, 500,                      // 目标位置 (100, 100)，目标尺寸 50x50
+    	0, 0, 1000, 700,                      // 目标位置 (100, 100)，目标尺寸 50x50
     	0
 	);
 }
@@ -38,10 +38,12 @@ void text(ALLEGRO_FONT* font){
     al_flip_display();
 }
 
-void loading_image(Animation ob[], int number){
+void image_to_frame(Animation ob[], int number){
+    float o_width = al_get_bitmap_width(ob[number].image);
+	float o_height = al_get_bitmap_height(ob[number].image);
     for (int i = 0; i < 4; i++){
         for(int j = 0; j< 4; j++){
-            ob[number].frame[i *4 + j] = al_create_sub_bitmap(ob[number].image, j* 75, i *75, 75, 75);
+            ob[number].frame[i *4 + j] = al_create_sub_bitmap(ob[number].image, j* (o_width /4), i *(o_height /4), (o_width /4), (o_height /4));
         }
     }
 }
