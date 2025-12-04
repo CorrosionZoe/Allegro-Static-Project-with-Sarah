@@ -17,7 +17,7 @@ int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer
                                     nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       return -1;
     }
-    if (!ob[1].image) {
+    if (!ob[3].image) {
 		al_show_native_message_box(disp, "Error", "Error", "Failed to load image!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	al_destroy_display(disp);
@@ -66,19 +66,30 @@ void STORE_struct(Animation ob[]){
     strcpy(ob[1].name, "Diamond");
     ob[1].frame = NULL;
     ob[1].image = NULL;
-    ob[1].image = al_load_bitmap("Image/Block_of_Diamond.png");
-    //2
+    //ob[1].image = al_load_bitmap("Image/Block_of_Diamond.png");
+    ///2
     ob[2].aFPS = 16;
     ob[2].frame = NULL;
     ob[2].image = NULL;
-    ob[2].image = al_load_bitmap("Image/runningMotion.png");
-    //Game Begin: 3 ----- Background
+    //ob[2].image = al_load_bitmap("Image/runningMotion.png");
+    /////////////////////////////////////////////////////////////////Game Begin: 3 ----- Background
     ob[3].image = NULL;
     strcpy(ob[3].name, "Snow_Background");
     ob[3].image = al_load_bitmap("Image/R.jpeg");
     //4 ----- Cat
     ob[4].aFPS = 6;
+    strcpy(ob[4].name, "Cat");
+    ob[4].frame = NULL;
+    //5 ----- Dog NPC
+    ob[5].aFPS;
     
+}
+
+void INIT_location(Frame XY[]){
+    //Px
+    XY[4].px = 100;
+    //Py
+    XY[4].py = 300;
 }
 
 

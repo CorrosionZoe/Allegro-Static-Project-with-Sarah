@@ -12,9 +12,9 @@ int main(int argc, char *argv[]){
     al_init_font_addon(); // initialize the font addon
     al_init_ttf_addon();
 	Animation ob[OB_CONTAINER];
-	Charactor player[1];
-	Charactor NPC[4];
+	Frame XY[OB_CONTAINER];
 	STORE_struct(ob);
+	INIT_location(XY);
 
 	//First creating display//
     ALLEGRO_DISPLAY* disp = al_create_display(SCREEN_W, SCREEN_H);
@@ -39,24 +39,25 @@ int main(int argc, char *argv[]){
     al_register_event_source(EQ, al_get_display_event_source(disp));
  	al_register_event_source(EQ, al_get_keyboard_event_source());
 	al_register_event_source(EQ, al_get_timer_event_source(timer));
-	ARRAY_frame(ob, 0);
+	int cat = 4; int cube = 0;
+	ARRAY_frame(ob, cat); ARRAY_frame(ob, cube);/*ob*/
 
 	/**********⭐**********⭐Main⭐************⭐**********/
-	int moving = 2;
+	int moving = 10;
     // set current frame and position.//
 	int curr[OB_CONTAINER];
-	int x[OB_CONTAINER];
-	int px[OB_CONTAINER];
-	int y[OB_CONTAINER];
-	int py[OB_CONTAINER];
-	curr[0] = 0, px[0] = 100, x[0] = 0;
-	py[0] = 100, y[0] = 0;
-	animation(ob, 0);
-	al_draw_bitmap(ob[0].frame[0], x[0], y[0], 0);
-	al_flip_display();
-	printf("2");
+	int x = 0; int y = 0;
+	memset(curr, -1, sizeof(curr));
+	animation(ob, cat); animation(ob, cube);/*ob*/
+	
+	
 	/***—————————————————Animation———————————————————***/
+	bool left = false;
+	bool right = false;
+	bool up = false;
+	bool down = false;
 	bool exit = false;
+	bool flags = 0;
 	al_start_timer(timer);	//Start the timer.
 	
 	while (!exit) {
@@ -68,35 +69,53 @@ int main(int argc, char *argv[]){
         	exit = true;
       	}
         else if(ev.type == ALLEGRO_EVENT_TIMER) {
-			curr[0] ++;
-			curr[0] %= ob[0].aFPS;
-        	px[0] += x[0];
-            py[0] += y[0];
 			al_clear_to_color(pink);
-			al_draw_bitmap(ob[3].image, 0, 0, 0);
-            al_draw_bitmap(ob[0].frame[curr[0]], px[0], py[0], 0);
+			al_draw_bitmap(ob[3].image, 0, 0, 0);//Background
+			if(left == true || right == true || up == true || down == true){   //Moving Animation
+				Timer_Part_1(curr, x, y, ob, XY, cat);
+				Timer_Part_2(curr, ob, XY, flags, cat, cat);
+			}else{  //Silent Animation
+				Timer_Part_1(curr, x, y, ob, XY, cube);
+				Timer_Part_2(curr, ob, XY, flags, cube, cat);
+			}
             al_flip_display();
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_DOWN){
 			switch(ev.keyboard.keycode) {
 				case ALLEGRO_KEY_UP:
-               		y[0] = 0 - moving;
-					x[0] = 0;
+               		up = true; y = 0 - moving; flags = 0;
                		break;
 				case ALLEGRO_KEY_DOWN:
-               		y[0] = moving;
-					x[0] = 0;
+					down = true; y = moving; flags = 0;
                		break;
             	case ALLEGRO_KEY_RIGHT:
-               		x[0] = moving;
-					y[0] = 0;
+					right = true; x = moving; flags = 0;
                		break;
 	            case ALLEGRO_KEY_LEFT:
-    		        x[0] = 0 - moving;
-					y[0] = 0;
+					left = true; x = 0 - moving; flags = 1;
             		break;
             	case ALLEGRO_KEY_ESCAPE:
     		        exit = true;
+            		break;
+			}
+		}
+		else if(ev.type == ALLEGRO_EVENT_KEY_UP){
+			switch(ev.keyboard.keycode) {
+				case ALLEGRO_KEY_UP:
+               		up = false;
+					y = 0;
+               		break;
+				case ALLEGRO_KEY_DOWN:
+					down = false;
+					y = 0;
+               		break;
+            	case ALLEGRO_KEY_RIGHT:
+					right = false;
+					x = 0;
+               		break;
+	            case ALLEGRO_KEY_LEFT:
+					left = false;
+					x = 0;
             		break;
 			}
 		}
@@ -105,11 +124,16 @@ int main(int argc, char *argv[]){
 
 
 	// Wait for 2 seconds. . .//
-	al_rest(5);
+	al_rest(.1);
 
 	// Release the bitmap data and then exit//
-	for (int i=0; i< ob[2].aFPS; i++)
-   		al_destroy_bitmap(ob[2].frame[i]);
+	for (int i=0; i< ob[cat].aFPS; i++){/*ob*/
+		al_destroy_bitmap(ob[cat].frame[i]);/*ob*/
+	}
+	for (int i=0; i< ob[cube].aFPS; i++){/*ob*/
+		al_destroy_bitmap(ob[cube].frame[i]);/*ob*/
+	}
+	al_destroy_bitmap(ob[3].image);
 	al_destroy_display(disp);
     return 0;
 }

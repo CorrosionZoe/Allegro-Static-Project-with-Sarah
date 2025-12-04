@@ -21,7 +21,8 @@
                 "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/main.cpp",
                 // 假设 ERROR 函数的实现在这里：
                 "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/allegro.cpp",
-                "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/image.cpp",
+                "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/graphic.cpp",
+                "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/animation.cpp",
                 
                 // 4. 包含路径 (-I) 和库路径 (-L)
                 "-I", 
