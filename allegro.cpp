@@ -92,7 +92,7 @@ void toggleCheck(ALLEGRO_DISPLAY *disp){
 void STORE_struct(Animation ob[], Entity Player[], Entity Dog[]){
     /*              Animation Structure                 */
     //0
-    ob[0].aFPS = 6;
+    ob[0].aFPS = 7;
     strcpy(ob[0].name, "Cube"); 
     ob[0].frame = NULL;
     //1
@@ -106,11 +106,11 @@ void STORE_struct(Animation ob[], Entity Player[], Entity Dog[]){
     strcpy(ob[4].name, "Cat");
     ob[4].frame = NULL;
     //5 ----- Dog NPC moving
-    ob[5].aFPS = 8;
+    ob[5].aFPS = 9;
     strcpy(ob[5].name, "Dog");
     ob[5].frame = NULL;
     //6 ----- Dog NPC staying
-    ob[6].aFPS = 6;
+    ob[6].aFPS = 7;
     strcpy(ob[6].name, "Cube");
     ob[6].frame = NULL;
     //-----------------------------------------------------------
@@ -119,7 +119,7 @@ void STORE_struct(Animation ob[], Entity Player[], Entity Dog[]){
     Player[0].speed = 20; Dog[0].speed = 20;
 }
 // function to check the location of the dog
-void INIT_location(Frame XY[], Entity Dog[]){
+void INIT_location(Frame XY[]){
     srand(time(0));
     //Px
     XY[4].px = 100;

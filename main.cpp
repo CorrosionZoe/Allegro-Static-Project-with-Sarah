@@ -9,6 +9,7 @@ int main(int argc, char *argv[]){
     al_init();
     al_install_keyboard(); al_init_image_addon(); al_init_ttf_addon(); al_init_font_addon(); // initialize addons
 	Animation ob[OB_CONTAINER]; Frame XY[OB_CONTAINER];
+	INIT_location(XY);
 	Entity Player[3]; Entity Dog[4];
       // create two images
 	STORE_struct(ob, Player, Dog);
@@ -26,13 +27,6 @@ int main(int argc, char *argv[]){
     ALLEGRO_FONT *font = al_load_ttf_font("store/ShortBaby.ttf", 50, 0);
     ALLEGRO_EVENT_QUEUE * EQ = al_create_event_queue();
 	ALLEGRO_TIMER * timer = al_create_timer(1.0 / FPS);
-    
-	//Checking total ERROR//
-    error = ERROR(disp, EQ, timer, font, ob, icon_32);
-	if(error != 0){
-		printf("%d errors", error);
-		return error;
-	}
 
 	//Set Title and events//
     al_set_window_title(disp, "Winter Squabble");
@@ -41,6 +35,15 @@ int main(int argc, char *argv[]){
 	al_register_event_source(EQ, al_get_timer_event_source(timer));
 	int cat = 4; int cube = 0; int dog = 5; int cube2 = 6;//Animations
 	ARRAY_frame(ob, cat); ARRAY_frame(ob, cube); ARRAY_frame(ob, dog); ARRAY_frame(ob, cube2);/*ob*/
+	//store frame set
+	animation(ob, cat); animation(ob, cube); animation(ob, dog); animation(ob, cube2);/*ob*/
+	
+	//Checking total ERROR//
+    error = ERROR(disp, EQ, timer, font, ob, icon_32);
+	if(error != 0){
+		printf("%d errors", error);
+		return error;
+	}
 
 	/**********⭐**********⭐Main⭐************⭐**********/
 	int Player_Choice = 0;
@@ -53,13 +56,11 @@ int main(int argc, char *argv[]){
 	int choice = 0; int members = 1;
 	//curr set
 	memset(curr, -1, sizeof(curr));
-	//store frame set
-	animation(ob, cat); animation(ob, cube); animation(ob, dog); animation(ob, cube2);/*ob*/
 	
 	
 	/***—————————————————Animation———————————————————***/
 	bool left = false; bool right = false; bool up = false; bool down = false; bool exit = false;
-	bool dog_palse = true; bool dog_choice = true;
+	bool dog_pause = true; bool dog_choice = true;
 	bool flags = 0; 
 	int dflags = 0;
 	int dog_rest = 0; int dog_move = 0; int dog_timer = 0;
@@ -90,7 +91,7 @@ int main(int argc, char *argv[]){
 			//----------------Dog Moving---------------
 
 			//First Step: Dog choosing the movement(One time task until the movement is finished)
-			/**
+			/*
 			if(dog_choice == true){
 				choice = Dog_Choice();
 				dog_choice = false;
@@ -98,10 +99,10 @@ int main(int argc, char *argv[]){
 			
 			//Decide the moving and silent animation
 			if(choice != 0){ //Moving
-				if(dog_palse == true){  /*(One time task until the movement is finished)
-					dog_move = rand()%2 + 2;  /*How many seconds
-					Dog_Move(Dog, dx, dy, dog, dflags);  /*This is get the dog moving choice and the flag
-					dog_palse = false;
+				if(dog_pause == true){  //(One time task until the movement is finished)
+					dog_move = rand()%2 + 2;  //How many seconds
+					Dog_Move(Dog, dx, dy, dog, dflags);  //This is get the dog moving choice and the flag
+					dog_pause = false;
 				}
 				dog_timer ++;
 				if(dog_timer < FPS * dog_move){
@@ -109,12 +110,12 @@ int main(int argc, char *argv[]){
 					Timer_Part_2(curr, ob, XY, dflags, dog, dog);
 				}else{
 					dog_timer = 0;
-					dog_palse = true; dog_choice = true;//Reset the bool
+					dog_pause = true; dog_choice = true;//Reset the bool
 				}
 			}else{ //Silent
-				if(dog_palse == true){
+				if(dog_pause == true){
 					dog_rest = rand()%3 + 1;
-					dog_palse = false;
+					dog_pause = false;
 				}
 				dog_timer ++;
 				if(dog_timer < FPS * dog_rest){
@@ -122,9 +123,9 @@ int main(int argc, char *argv[]){
 					Timer_Part_2(curr, ob, XY, dflags, cube2, dog);
 				}else{
 					dog_timer = 0;
-					dog_palse = true; dog_choice = true;//Reset the bool
+					dog_pause = true; dog_choice = true;//Reset the bool
 				}
-			}**/
+			}There's some issues with the code about the dog NPC*/
             al_flip_display();
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_DOWN){

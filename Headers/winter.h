@@ -58,7 +58,7 @@ struct Image {
 //Storing Animation Information(allegro.cpp)
 void STORE_struct(Animation ob[], Entity Player[], Entity Dog[]);
 void ARRAY_frame(Animation ob[], int number);
-void INIT_location(Frame XY[], Entity Dog[]);
+void INIT_location(Frame XY[]);
 
 //Check the ERROR(allegro.cpp)
 int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer, ALLEGRO_FONT* font, Animation ob[], ALLEGRO_BITMAP *icon_32);
