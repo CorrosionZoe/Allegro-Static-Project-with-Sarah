@@ -1,3 +1,4 @@
+/*Zoe and Sarah*/
 #include "winter.h"
 
 // Function to check errors.
@@ -106,7 +107,7 @@ void STORE_struct(Animation ob[], Entity Player[], Entity Dog[]){
     strcpy(ob[4].name, "Cat");
     ob[4].frame = NULL;
     //5 ----- Dog NPC moving
-    ob[5].aFPS = 9;
+    ob[5].aFPS = 4;
     strcpy(ob[5].name, "Dog");
     ob[5].frame = NULL;
     //6 ----- Dog NPC staying
@@ -116,7 +117,7 @@ void STORE_struct(Animation ob[], Entity Player[], Entity Dog[]){
     //-----------------------------------------------------------
     
     /*                 Entity Structure                 */
-    Player[0].speed = 20; Dog[0].speed = 20;
+    Player[0].speed = 20; Dog[5].speed = 5;
 }
 // function to check the location of the dog
 void INIT_location(Frame XY[]){

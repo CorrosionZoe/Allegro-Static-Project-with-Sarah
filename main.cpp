@@ -1,3 +1,5 @@
+/*Zoe and Sarah*/
+
 #include "winter.h"
 
 
@@ -91,17 +93,18 @@ int main(int argc, char *argv[]){
 			//----------------Dog Moving---------------
 
 			//First Step: Dog choosing the movement(One time task until the movement is finished)
-			/*
+			
 			if(dog_choice == true){
 				choice = Dog_Choice();
 				dog_choice = false;
 			}
-			
-			//Decide the moving and silent animation
+			// //Decide the moving and silent animation
 			if(choice != 0){ //Moving
 				if(dog_pause == true){  //(One time task until the movement is finished)
-					dog_move = rand()%2 + 2;  //How many seconds
-					Dog_Move(Dog, dx, dy, dog, dflags);  //This is get the dog moving choice and the flag
+					dog_move = rand()%5 + 1;  //How many seconds
+					Dog_Move(Dog, dx, dy, dog, dflags, choice);  //This is get the dog moving choice and the flag
+					printf("%d\n", choice);
+					printf("%d %d\n", dx, dy);
 					dog_pause = false;
 				}
 				dog_timer ++;
@@ -114,18 +117,18 @@ int main(int argc, char *argv[]){
 				}
 			}else{ //Silent
 				if(dog_pause == true){
-					dog_rest = rand()%3 + 1;
+					dog_rest = rand()%8 + 3;
 					dog_pause = false;
 				}
 				dog_timer ++;
 				if(dog_timer < FPS * dog_rest){
-					Timer_Part_1(curr, dx, dy, ob, XY, cube2, dog);
+					Timer_Part_1(curr, 0, 0, ob, XY, cube2, dog);
 					Timer_Part_2(curr, ob, XY, dflags, cube2, dog);
 				}else{
 					dog_timer = 0;
 					dog_pause = true; dog_choice = true;//Reset the bool
 				}
-			}There's some issues with the code about the dog NPC*/
+			}//There's some issues with the code about the dog NPC
             al_flip_display();
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_DOWN){

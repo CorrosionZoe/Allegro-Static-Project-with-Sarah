@@ -1,3 +1,4 @@
+/*Zoe and Sarah*/
 #include <allegro5/allegro.h>
 #include <stdio.h>
 #include <time.h>
@@ -60,7 +61,7 @@ void STORE_struct(Animation ob[], Entity Player[], Entity Dog[]);
 void ARRAY_frame(Animation ob[], int number);
 void INIT_location(Frame XY[]);
 
-//Check the ERROR(allegro.cpp)
+// Check the ERROR(allegro.cpp)
 int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer, ALLEGRO_FONT* font, Animation ob[], ALLEGRO_BITMAP *icon_32);
 int addonCheck(ALLEGRO_DISPLAY *disp);
 void toggleCheck(ALLEGRO_DISPLAY *disp);
@@ -77,7 +78,7 @@ void Timer_Part_2(int cur[], Animation ob[], Frame XY[], int F, int aniID, int p
 
 //Entity Functions(game_functions.cpp)
 int Dog_Choice();
-void Dog_Move(Entity Dog[], int &x, int &y, int number, int &f);
+void Dog_Move(Entity Dog[], int &x, int &y, int number, int &f, int choice);
 
 
 

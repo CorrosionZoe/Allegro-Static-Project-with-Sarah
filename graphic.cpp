@@ -1,3 +1,4 @@
+/*Zoe and Sarah*/
 #include "winter.h"
 
 // function to store animation images into an array

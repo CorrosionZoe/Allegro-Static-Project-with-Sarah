@@ -1,3 +1,4 @@
+/*Zoe and Sarah*/
 #include "winter.h"
 // Function for dog's choice of movement
 int Dog_Choice(){
@@ -17,16 +18,15 @@ int Dog_Choice(){
 }
 
 // function to control dog movement
-void Dog_Move(Entity Dog[], int &x, int &y, int number, int &f){
-    int choice = Dog_Choice();
+void Dog_Move(Entity Dog[], int &x, int &y, int number, int &f, int choice){
     switch(choice){
-        case 1: x = 0 - Dog[number].speed; f = 1;//Left
+        case 1: x = 0 - Dog[number].speed; y = 0; f = 1;//Left 
             break;
-        case 2: x = Dog[number].speed; f = 0;//Right
+        case 2: x = Dog[number].speed; y = 0; f = 0;//Right
             break;
-        case 3: y = 0 - Dog[number].speed; f = 0;//Up
+        case 3: y = 0 - Dog[number].speed; x = 0; f = 0;//Up
             break;
-        case 4: y = Dog[number].speed; f = 0;//Down
+        case 4: y = Dog[number].speed; x = 0; f = 0;//Down
             break;
         case 5: x = 0 - Dog[number].speed; y = 0 - Dog[number].speed; f = 1;// can move down and left
             break;

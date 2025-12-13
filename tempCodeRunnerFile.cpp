@@ -1,1 +1,0 @@
-al_load_bitmap("Block_of_Diamond_JE6_BE3.png");

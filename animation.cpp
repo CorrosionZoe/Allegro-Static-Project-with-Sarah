@@ -1,3 +1,4 @@
+/*Zoe and Sarah*/
 #include "winter.h"
 // function to find the right frame for the animation for each change in movement
 void Timer_Part_1(int cur[], int x, int y, Animation ob[], Frame XY[], int aniID, int posID){
