@@ -19,6 +19,7 @@ int main(int argc, char *argv[]){
 	//First creating display//
     ALLEGRO_DISPLAY* disp = al_create_display(SCREEN_W, SCREEN_H);
 	ALLEGRO_BITMAP *icon_32 = al_load_bitmap("Snowball_32.png");
+	ALLEGRO_BITMAP *game_buffer = al_create_bitmap(SCREEN_W, SCREEN_H);
 	al_set_display_icon(disp, icon_32);
 
 	//Checking addon ERROR//
@@ -41,7 +42,7 @@ int main(int argc, char *argv[]){
 	animation(ob, cat); animation(ob, cube); animation(ob, dog); animation(ob, cube2);/*ob*/
 	
 	//Checking total ERROR//
-    error = ERROR(disp, EQ, timer, font, ob, icon_32);
+    error = ERROR(disp, EQ, timer, font, ob, icon_32, game_buffer);
 	if(error != 0){
 		printf("%d errors", error);
 		return error;
@@ -78,9 +79,9 @@ int main(int argc, char *argv[]){
         	exit = true;
       	}
         else if(ev.type == ALLEGRO_EVENT_TIMER) {
+			al_set_target_bitmap(game_buffer);
 			al_clear_to_color(black);
 			al_draw_bitmap(ob[3].image, 0, 0, 0);//Background
-
 			//------------Cat Moving(Player)-----------
 			if(left == true || right == true || up == true || down == true){   //Moving Animation
 				Timer_Part_1(curr, x, y, ob, XY, cat, cat);
@@ -89,6 +90,7 @@ int main(int argc, char *argv[]){
 				Timer_Part_1(curr, x, y, ob, XY, cube, cat);
 				Timer_Part_2(curr, ob, XY, flags, cube, cat);
 			}
+			al_draw_rectangle(XY[cat].px, XY[cat].py, XY[cat].px + XY[cat].W, XY[cat].py + XY[cat].H, pink, 5);
 
 			//----------------Dog Moving---------------
 
@@ -101,7 +103,7 @@ int main(int argc, char *argv[]){
 			// //Decide the moving and silent animation
 			if(choice != 0){ //Moving
 				if(dog_pause == true){  //(One time task until the movement is finished)
-					dog_move = rand()%5 + 1;  //How many seconds
+					dog_move = rand()%5 + 1;  //How many seconds(1-5)
 					Dog_Move(Dog, dx, dy, dog, dflags, choice);  //This is get the dog moving choice and the flag
 					printf("%d\n", choice);
 					printf("%d %d\n", dx, dy);
@@ -117,7 +119,7 @@ int main(int argc, char *argv[]){
 				}
 			}else{ //Silent
 				if(dog_pause == true){
-					dog_rest = rand()%8 + 3;
+					dog_rest = rand()%3 + 3;//(3-5)
 					dog_pause = false;
 				}
 				dog_timer ++;
@@ -128,7 +130,9 @@ int main(int argc, char *argv[]){
 					dog_timer = 0;
 					dog_pause = true; dog_choice = true;//Reset the bool
 				}
-			}//There's some issues with the code about the dog NPC
+			}
+			al_draw_rectangle(XY[dog].px, XY[dog].py, XY[dog].px + XY[dog].W, XY[dog].py + XY[dog].H, purple, 5);
+			//There's some issues with the code about the dog NPC
             al_flip_display();
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_DOWN){

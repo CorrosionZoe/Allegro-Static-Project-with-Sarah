@@ -35,6 +35,7 @@ struct Animation{
 };
 
 struct Frame{
+    int W; int H;
     int px; int py;
 };
 
@@ -62,7 +63,7 @@ void ARRAY_frame(Animation ob[], int number);
 void INIT_location(Frame XY[]);
 
 // Check the ERROR(allegro.cpp)
-int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer, ALLEGRO_FONT* font, Animation ob[], ALLEGRO_BITMAP *icon_32);
+int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer, ALLEGRO_FONT* font, Animation ob[], ALLEGRO_BITMAP *icon_32, ALLEGRO_BITMAP *game_buffer);
 int addonCheck(ALLEGRO_DISPLAY *disp);
 void toggleCheck(ALLEGRO_DISPLAY *disp);
 

@@ -37,3 +37,7 @@ void image_to_frame(Animation ob[], int number){
         }
     }
 }
+
+void BounderyBox(Frame XY[]){
+    
+}

@@ -2,11 +2,15 @@
 #include "winter.h"
 
 // Function to check errors.
-int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer, ALLEGRO_FONT* font, Animation ob[], ALLEGRO_BITMAP *icon_32){
+int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer, ALLEGRO_FONT* font, Animation ob[], ALLEGRO_BITMAP *icon_32, ALLEGRO_BITMAP *game_buffer){
     //AL
     int Enum = 0;
     if(!disp){
         al_show_native_message_box(disp, "Error", "EEE404", "Fail to display", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
+        Enum ++;
+    }
+    if(!game_buffer){
+        al_show_native_message_box(disp, "Error", "EEE404", "Fail to load the buffer", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
         Enum ++;
     }
     if (!EQ) {
@@ -128,6 +132,9 @@ void INIT_location(Frame XY[]){
     //Py
     XY[4].py = 300;
     XY[5].py = rand()%601 + 50;
+    //BB
+    XY[4].W = 200; XY[4].H = 200;
+    XY[5].W = 300; XY[5].H = 300;
 }
 
 

@@ -6,8 +6,8 @@ int Dog_Choice(){
     bool normal = true;
     // while loop to randomly choose between moving or throwing a snowball.
     while(normal){
-        int choice = rand()% 2 + 1;
-        if(choice == 1){
+        int choice = rand()% 3 + 1;
+        if(choice != 1){
             int choice2 = rand()% 8 + 1;
             return choice2;
         }else{
@@ -59,22 +59,21 @@ void drawBoundingBox(Image &cat) {
     al_draw_line(image.bbLeft, image.bbBottom, image.bbRight, image.bbBottom, RED, 1);
 	al_draw_line(image.bbLeft, image.bbTop, image.bbLeft, image.bbBottom, RED, 1);
 	al_draw_line(image.bbRight, image.bbTop, image.bbRight, image.bbBottom, RED,1);
-}
+}*/
 
-bool isCollision(Image &cat, Image &dog) {
-    calcBounds(cat);
-    calcBounds(dog);
-    if (a.bbBottom < dog.bbTop) {
+bool isCollision(Frame XY[], int b1, int b2) {
+
+    if (XY[b1].py + XY[b1].H < XY[b2].py) {
         return false;
     }
-    else if (cat.bbTop > dog.bbBottom) {
+    else if (XY[b1].py > XY[b2].py + XY[b2].H) {
         return false;
     }
-    else if (cat.bbRight < dog.bbLeft) {
+    else if (XY[b1].px + XY[b1].W < XY[b2].px) {
         return false;
     }
-    else if (cat.bbLeft > dog.bbRight) {
+    else if (XY[b1].px > XY[b2].px + XY[b2].W) {
         return false;
     }
     return true;
-}*/
+}
