@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
 	}
 
 	/**********⭐**********⭐Main⭐************⭐**********/
-	int Player_Choice = 0;
+
     // set current frame and position.//
 	int curr[OB_CONTAINER];
 	//Player position
@@ -62,11 +62,19 @@ int main(int argc, char *argv[]){
 	
 	
 	/***—————————————————Animation———————————————————***/
-	bool left = false; bool right = false; bool up = false; bool down = false; bool exit = false;
+
+	//KEY BOOL
+	bool left = false; bool right = false; bool up = false; bool down = false; bool exit = false; bool showBB = false;
+	//DOG BOOL
 	bool dog_pause = true; bool dog_choice = true;
+	//FLAG BOOL
 	bool flags = 0; 
-	int dflags = 0;
-	int dog_rest = 0; int dog_move = 0; int dog_timer = 0;
+	//DOG FLAG + DOG INT
+	int dflags = 0;                                       //BB INT
+	int dog_rest = 0; int dog_move = 0; int dog_timer = 0; int BB_timer = 0;
+
+	int Player_Choice = 0;
+	READ_files(disp, Player_Choice, exit);
 	al_start_timer(timer);	//Start the timer.
 
 	
@@ -79,9 +87,14 @@ int main(int argc, char *argv[]){
         	exit = true;
       	}
         else if(ev.type == ALLEGRO_EVENT_TIMER) {
+			//Set game buffer to the screen
 			al_set_target_bitmap(game_buffer);
+			//Clear buffer
 			al_clear_to_color(black);
-			al_draw_bitmap(ob[3].image, 0, 0, 0);//Background
+
+			//Background Display
+			al_draw_bitmap(ob[3].image, 0, 0, 0);
+
 			//------------Cat Moving(Player)-----------
 			if(left == true || right == true || up == true || down == true){   //Moving Animation
 				Timer_Part_1(curr, x, y, ob, XY, cat, cat);
@@ -90,7 +103,9 @@ int main(int argc, char *argv[]){
 				Timer_Part_1(curr, x, y, ob, XY, cube, cat);
 				Timer_Part_2(curr, ob, XY, flags, cube, cat);
 			}
-			al_draw_rectangle(XY[cat].px, XY[cat].py, XY[cat].px + XY[cat].W, XY[cat].py + XY[cat].H, pink, 5);
+			
+
+
 
 			//----------------Dog Moving---------------
 
@@ -131,9 +146,21 @@ int main(int argc, char *argv[]){
 					dog_pause = true; dog_choice = true;//Reset the bool
 				}
 			}
-			al_draw_rectangle(XY[dog].px, XY[dog].py, XY[dog].px + XY[dog].W, XY[dog].py + XY[dog].H, purple, 5);
-			//There's some issues with the code about the dog NPC
-            al_flip_display();
+			
+
+			//Show bounderies
+			if(showBB == true){
+				al_draw_rectangle(XY[cat].px, XY[cat].py, XY[cat].px + XY[cat].W, XY[cat].py + XY[cat].H, pink, 5);
+				al_draw_rectangle(XY[dog].px, XY[dog].py, XY[dog].px + XY[dog].W, XY[dog].py + XY[dog].H, purple, 5);
+				BB_timer = 1;
+			}
+			
+			//Create Fullscreen functions
+			al_set_target_bitmap(al_get_backbuffer(disp));
+			scale_buffer(disp, game_buffer);
+
+			//Make the screen
+			al_flip_display();
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_DOWN){
 			switch(ev.keyboard.keycode) {
@@ -151,6 +178,14 @@ int main(int argc, char *argv[]){
             		break;
 				case ALLEGRO_KEY_F11:
 					toggleCheck(disp);
+					break;
+				case ALLEGRO_KEY_B:
+					if(BB_timer == 0){
+						showBB = true;
+					}else{
+						showBB = false;
+						BB_timer = 0;
+					}
 					break;
             	case ALLEGRO_KEY_ESCAPE:
     		        exit = true;

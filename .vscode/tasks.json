@@ -24,6 +24,7 @@
                 "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/graphic.cpp",
                 "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/animation.cpp",
                 "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/game_functions.cpp",
+                "D:/Computer_Science/Projects_Zoe/SNOWFIGHT/file_read_write.cpp",
                 
                 // 4. 包含路径 (-I) 和库路径 (-L)
                 "-I", 

@@ -81,11 +81,13 @@ int addonCheck(ALLEGRO_DISPLAY *disp){
    	}
     return 0;
 }
+
 //function for animation
 void ARRAY_frame(Animation ob[], int number){
     int store = ob[number].aFPS;
     ob[number].frame = (ALLEGRO_BITMAP**)malloc(store * sizeof(ALLEGRO_BITMAP*));
 }
+
 // function to switch between small and full window screen.
 void toggleCheck(ALLEGRO_DISPLAY *disp){
     int flags = al_get_display_flags(disp); //
@@ -93,6 +95,7 @@ void toggleCheck(ALLEGRO_DISPLAY *disp){
     int new_state = is_fullscreen ? 0 : 1;
     al_set_display_flag(disp, ALLEGRO_FULLSCREEN_WINDOW, new_state);
 }
+
 // function to store the images of the animation, cat, and dog.
 void STORE_struct(Animation ob[], Entity Player[], Entity Dog[]){
     /*              Animation Structure                 */
@@ -121,20 +124,44 @@ void STORE_struct(Animation ob[], Entity Player[], Entity Dog[]){
     //-----------------------------------------------------------
     
     /*                 Entity Structure                 */
-    Player[0].speed = 20; Dog[5].speed = 5;
+    Player[0].speed = 15; Player[1].speed = 20; Player[2].speed = 10; Dog[5].speed = 15;
 }
+
 // function to check the location of the dog
 void INIT_location(Frame XY[]){
     srand(time(0));
     //Px
     XY[4].px = 100;
-    XY[5].px = rand()%901 + 50;
+    XY[5].px = rand()%701 + 0;
     //Py
     XY[4].py = 300;
-    XY[5].py = rand()%601 + 50;
+    XY[5].py = rand()%401 + 0;
     //BB
     XY[4].W = 200; XY[4].H = 200;
     XY[5].W = 300; XY[5].H = 300;
 }
 
+void scale_buffer(ALLEGRO_DISPLAY *disp, ALLEGRO_BITMAP *game_buffer){
+    int screen_w = al_get_display_width(disp);
+    int screen_h = al_get_display_height(disp);
 
+    float option1 = (float)screen_w / SCREEN_W;
+    float option2 = (float)screen_h / SCREEN_H;
+    float scale = (option1 < option2) ? option1 : option2;
+
+    float scaled_w = SCREEN_W * scale;
+    float scaled_h = SCREEN_H * scale;
+
+    float CX = (screen_w - scaled_w) / 2.0f;
+    float CY = (screen_h - scaled_h) / 2.0f;
+
+    al_draw_scaled_bitmap(
+        game_buffer,
+        0, 0, SCREEN_W, SCREEN_H,
+        CX, CY,
+        scaled_w, scaled_h,
+        0
+    );
+    
+    al_flip_display();
+}

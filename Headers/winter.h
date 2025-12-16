@@ -66,12 +66,17 @@ void INIT_location(Frame XY[]);
 int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer, ALLEGRO_FONT* font, Animation ob[], ALLEGRO_BITMAP *icon_32, ALLEGRO_BITMAP *game_buffer);
 int addonCheck(ALLEGRO_DISPLAY *disp);
 void toggleCheck(ALLEGRO_DISPLAY *disp);
+void scale_buffer(ALLEGRO_DISPLAY *disp, ALLEGRO_BITMAP *game_buffer);
+
+//Read Files
+void READ_files(ALLEGRO_DISPLAY *disp, int &Cat_Specie, bool &exit);
 
 //Graphic Part(graphic.cpp)
 void animation(Animation ob[], int number); //scan images and put them into frame array
 //void shape();//Some Shapes Templates
 void text(ALLEGRO_FONT* font);//font Templates
 void image_to_frame(Animation ob[], int number);//Cut image into pieces and turn them to frame array
+void showing_boundery(Frame XY[]);
 
 //Main Animation Functions(animation.cpp)
 void Timer_Part_1(int cur[], int x, int y, Animation ob[], Frame XY[], int aniID, int posID);

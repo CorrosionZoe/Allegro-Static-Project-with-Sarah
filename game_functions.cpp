@@ -24,17 +24,17 @@ void Dog_Move(Entity Dog[], int &x, int &y, int number, int &f, int choice){
             break;
         case 2: x = Dog[number].speed; y = 0; f = 0;//Right
             break;
-        case 3: y = 0 - Dog[number].speed; x = 0; f = 0;//Up
+        case 3: y = 0 - Dog[number].speed; x = 0;//Up
             break;
-        case 4: y = Dog[number].speed; x = 0; f = 0;//Down
+        case 4: y = Dog[number].speed; x = 0;//Down
             break;
-        case 5: x = 0 - Dog[number].speed; y = 0 - Dog[number].speed; f = 1;// can move down and left
+        case 5: x = 0 - Dog[number].speed; y = 0 - Dog[number].speed; f = 1;// can move up and left
             break;
-        case 6: x = 0 - Dog[number].speed; y = Dog[number].speed; f = 0;// can move down and right
+        case 6: x = 0 - Dog[number].speed; y = Dog[number].speed; f = 1;// can move down and left
             break;
-        case 7: x = Dog[number].speed; y = 0 - Dog[number].speed; f = 1;// can move up and left
+        case 7: x = Dog[number].speed; y = 0 - Dog[number].speed; f = 0;// can move up and right
             break;
-        case 8: x = Dog[number].speed; y = Dog[number].speed; f = 0;// can move up and right
+        case 8: x = Dog[number].speed; y = Dog[number].speed; f = 0;// can move down and right
             break;
     }
 }
