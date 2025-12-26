@@ -18,50 +18,77 @@ int Dog_Choice(){
 }
 
 // function to control dog movement
-void Dog_Move(Entity Dog[], int &x, int &y, int number, int &f, int choice){
-    switch(choice){
-        case 1: x = 0 - Dog[number].speed; y = 0; f = 1;//Left 
+void Dog_Move(Entity Dog[], LDog m[], int number){
+    switch(m[number].choice){
+        case 1: m[number].x = 0 - Dog[number].speed; m[number].y = 0; m[number].flag = 1;//Left 
             break;
-        case 2: x = Dog[number].speed; y = 0; f = 0;//Right
+        case 2: m[number].x = Dog[number].speed; m[number].y = 0; m[number].flag = 0;//Right
             break;
-        case 3: y = 0 - Dog[number].speed; x = 0;//Up
+        case 3: m[number].y = 0 - Dog[number].speed; m[number].x = 0;//Up
             break;
-        case 4: y = Dog[number].speed; x = 0;//Down
+        case 4: m[number].y = Dog[number].speed; m[number].x = 0;//Down
             break;
-        case 5: x = 0 - Dog[number].speed; y = 0 - Dog[number].speed; f = 1;// can move up and left
+        case 5: m[number].x = 0 - Dog[number].speed; m[number].y = 0 - Dog[number].speed; m[number].flag = 1;// can move up and left
             break;
-        case 6: x = 0 - Dog[number].speed; y = Dog[number].speed; f = 1;// can move down and left
+        case 6: m[number].x = 0 - Dog[number].speed; m[number].y = Dog[number].speed; m[number].flag = 1;// can move down and left
             break;
-        case 7: x = Dog[number].speed; y = 0 - Dog[number].speed; f = 0;// can move up and right
+        case 7: m[number].x = Dog[number].speed; m[number].y = 0 - Dog[number].speed; m[number].flag = 0;// can move up and right
             break;
-        case 8: x = Dog[number].speed; y = Dog[number].speed; f = 0;// can move down and right
+        case 8: m[number].x = Dog[number].speed; m[number].y = Dog[number].speed; m[number].flag = 0;// can move down and right
             break;
     }
 }
 
-
-// function to detect if dog and cat collide.
-
-/*
-    calcBounds, calculate border locations of boundary box
-
-void calcBounds(Image &cat) {
-    cat.bbLeft = cat.x;
-	cat.bbTop  = cat.y;
-	cat.bbRight = cat.bbLeft + al_get_bitmap_width(cat.bitmap);
-	cat.bbBottom = cat.bbTop + al_get_bitmap_height(cat.bitmap);
+void Shadows_update(HitBox XY[], LDog m[], int member){
+    //Cat
+    XY[cat_1].sdx = XY[cat_1].bx + XY[cat_1].W / 2;
+    XY[cat_1].sdy = XY[cat_1].by + XY[cat_1].H;
+    //Dog
+    for(int i = 0; i < member; i++){
+        m[i].dog_hitbox.sdx = m[i].dog_hitbox.bx + XY[dog_1].W / 2;
+        m[i].dog_hitbox.sdy = m[i].dog_hitbox.by + XY[dog_1].H;
+    }
 }
 
+void Boundary_update(HitBox XY[], LDog m[], int member){
+    //BB
+    XY[cat_1].bx = XY[cat_1].px + 71;  XY[cat_1].by = XY[cat_1].py + 49; //Cat
+    for(int i = 0; i < member; i++){
+        m[i].dog_hitbox.bx = m[i].dog_hitbox.px + 80;
+        m[i].dog_hitbox.by = m[i].dog_hitbox.py + 75;  //Dog
+    }
+}
 
-void drawBoundingBox(Image &cat) {
-    calcBounds(image);
-	al_draw_line(image.bbLeft, image.bbTop, image.bbRight, image.bbTop, RED, 1);
-    al_draw_line(image.bbLeft, image.bbBottom, image.bbRight, image.bbBottom, RED, 1);
-	al_draw_line(image.bbLeft, image.bbTop, image.bbLeft, image.bbBottom, RED, 1);
-	al_draw_line(image.bbRight, image.bbTop, image.bbRight, image.bbBottom, RED,1);
-}*/
+void Life_update(HitBox XY[], LDog m[], int member){
+    XY[cat_1].lx = XY[cat_1].px + 40; XY[cat_1].ly = XY[cat_1].py - 22;
+    for(int i = 0; i< member; i++){
+        m[i].dog_hitbox.lx = m[i].dog_hitbox.px + 40; m[i].dog_hitbox.ly = m[i].dog_hitbox.py - 22;
+    }
+}
 
-bool isCollision(Frame XY[], int b1, int b2) {
+// function to detect if dog and cat collide.
+void Boundary_Detection(HitBox XY[], Animation ob[], ALLEGRO_FONT *font){
+    char b1 = cat_1; //cat_1
+    char b2 = dog_1;  // dog_1
+    char b3 = snowb_s;//snowb_s
+// if Cat gets hit by snowball
+       al_clear_to_color(white);
+    if (isCollision(XY, b1, b2) == true){
+       // printf("You lose a life");
+        al_draw_text(font, pink, SCREEN_W/2,(SCREEN_H/4), ALLEGRO_ALIGN_CENTRE, "You lost a life");
+        al_flip_display();
+//    }else if (isCollision(XY, b2,b1) == true){ // function to detect if snowball collides with dog
+  //      al_draw_text(font, pink, SCREEN_W/2, (SCREEN_H/4), ALLEGRO_ALIGN_CENTRE, "Dog lost a life");
+    } //else (isCollision(XY,))
+    //, (SCREEN_H/4)
+}
+/*
+ //BB
+    XY[4].bx = XY[4].px + 0;  XY[4].by = XY[4].py + 55; XY[4].W = 209; XY[4].H = 90;//Cat
+    XY[5].bx = XY[5].px + 80; XY[5].by = XY[5].py +75;  XY[5].W = 111; XY[5].H = 268;//Dog
+*/
+// boundary for display screen
+bool isCollision(HitBox XY[], int b1, int b2) {
 
     if (XY[b1].py + XY[b1].H < XY[b2].py) {
         return false;

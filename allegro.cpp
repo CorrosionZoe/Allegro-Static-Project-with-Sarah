@@ -24,26 +24,26 @@ int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer
                                     nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       Enum ++;
     }
-    if (!ob[0].frame) {
-		al_show_native_message_box(disp, "Error", "Error", "Failed to load Cube0 animation!",
+    if (!ob[0].image) {
+		al_show_native_message_box(disp, "Error", "Error", "Failed to load Background!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	al_destroy_display(disp);
      	Enum ++;
 	}
-    if (!ob[6].frame) {
-		al_show_native_message_box(disp, "Error", "Error", "Failed to load Cube1 animation!",
+    if (!ob[cat_1].frame || !ob[cat_1_s].frame) {
+		al_show_native_message_box(disp, "Error", "Error", "Failed to load Cat animation!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	al_destroy_display(disp);
      	Enum ++;
 	}
-    if (!ob[4].frame || !ob[5].frame) {
-		al_show_native_message_box(disp, "Error", "Error", "Failed to load Animal animation!",
+    if (!ob[dog_1].frame || !ob[dog_1_s].frame) {
+		al_show_native_message_box(disp, "Error", "Error", "Failed to load Dog animation!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	al_destroy_display(disp);
      	Enum ++;
 	}
-    if (!ob[3].image) {
-		al_show_native_message_box(disp, "Error", "Error", "Failed to load image!",
+    if (!ob[snowb_s].image) {
+		al_show_native_message_box(disp, "Error", "Error", "Failed to load Snowball!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	al_destroy_display(disp);
      	Enum ++;
@@ -79,6 +79,11 @@ int addonCheck(ALLEGRO_DISPLAY *disp){
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	return -1;
    	}
+    if (!al_install_mouse()) {
+	    al_show_native_message_box(disp, "Error", "Error", "failed to initialize the mouse!",
+                                 nullptr, ALLEGRO_MESSAGEBOX_ERROR);
+      	return -1;
+   	}
     return 0;
 }
 
@@ -96,49 +101,15 @@ void toggleCheck(ALLEGRO_DISPLAY *disp){
     al_set_display_flag(disp, ALLEGRO_FULLSCREEN_WINDOW, new_state);
 }
 
-// function to store the images of the animation, cat, and dog.
-void STORE_struct(Animation ob[], Entity Player[], Entity Dog[]){
-    /*              Animation Structure                 */
-    //0
-    ob[0].aFPS = 7;
-    strcpy(ob[0].name, "Cube"); 
-    ob[0].frame = NULL;
-    //1
-    //2
-    /////////////////////////////////////////////////////////////////Game Begin: 3 ----- Background
-    ob[3].image = NULL;
-    strcpy(ob[3].name, "Snow_Background");
-    ob[3].image = al_load_bitmap("Image/SnowBG.jpeg");
-    //4 ----- Cat moving
-    ob[4].aFPS = 6;
-    strcpy(ob[4].name, "Cat");
-    ob[4].frame = NULL;
-    //5 ----- Dog NPC moving
-    ob[5].aFPS = 4;
-    strcpy(ob[5].name, "Dog");
-    ob[5].frame = NULL;
-    //6 ----- Dog NPC staying
-    ob[6].aFPS = 7;
-    strcpy(ob[6].name, "Cube");
-    ob[6].frame = NULL;
-    //-----------------------------------------------------------
-    
-    /*                 Entity Structure                 */
-    Player[0].speed = 15; Player[1].speed = 20; Player[2].speed = 10; Dog[5].speed = 15;
-}
-
 // function to check the location of the dog
-void INIT_location(Frame XY[]){
+void INIT_location(HitBox XY[], LDog m[], int member){
+    XY[cat_1].W = 55; XY[cat_1].H = 129;
+    XY[dog_1].W = 111; XY[dog_1].H = 268;
     srand(time(0));
-    //Px
-    XY[4].px = 100;
-    XY[5].px = rand()%701 + 0;
-    //Py
-    XY[4].py = 300;
-    XY[5].py = rand()%401 + 0;
-    //BB
-    XY[4].W = 200; XY[4].H = 200;
-    XY[5].W = 300; XY[5].H = 300;
+    for(int i = 0; i < member; i++){
+        m[i].dog_hitbox.px = rand()%700+1;
+        m[i].dog_hitbox.py = rand()%370+31;
+    }
 }
 
 void scale_buffer(ALLEGRO_DISPLAY *disp, ALLEGRO_BITMAP *game_buffer){
@@ -165,3 +136,41 @@ void scale_buffer(ALLEGRO_DISPLAY *disp, ALLEGRO_BITMAP *game_buffer){
     
     al_flip_display();
 }
+
+// function to store the images of the animation, cat, and dog.
+void STORE_struct(Animation ob[], Entity Player[], Entity Dog[], Entity SB[]){
+    /*              Animation Structure                 */
+
+    //Game Begin: 0 ----- Background
+    ob[0].image = NULL; ob[0].image = al_load_bitmap("Image/SnowBG.jpeg");
+    //1 ----- Cat staying(original)
+    ob[cat_1_s].aFPS = 13; strcpy(ob[cat_1_s].name, "Cat_S"); ob[cat_1_s].frame = NULL;
+    //2----- Cat moving(original)
+    ob[cat_1].aFPS = 6; strcpy(ob[cat_1].name, "Cat"); ob[cat_1].frame = NULL;
+    //4
+    //10 ----- Dog NPC staying(original)
+    ob[dog_1_s].aFPS = 13; strcpy(ob[dog_1_s].name, "Cat_S"); ob[dog_1_s].frame = NULL;
+    //11 ----- Dog NPC moving(original)
+    ob[dog_1].aFPS = 3; strcpy(ob[dog_1].name, "Dog"); ob[dog_1].frame = NULL;
+    //20 ----- Snowball!(original)
+    ob[snowb_s].image = NULL; ob[snowb_s].image = al_load_bitmap("Image/SnowBall_O.png");
+    //22 ----- Shadow
+    ob[shadow].image = NULL; ob[shadow].image = al_load_bitmap("Image/GShadow.png");
+    //23 ----- Red Heart(Alive)
+    ob[heart_r].image = NULL; ob[heart_r].image = al_load_bitmap("Image/Heart.png");
+    //24 ----- Gray Heart(Dead)
+    ob[heart_g].image = NULL; ob[heart_g].image = al_load_bitmap("Image/GrayHeart.png");
+
+
+    //-----------------------------------------------------------
+    
+    // /*                 Entity Structure                 */
+    //Speed
+    Player[0].speed = 5; Player[1].speed = 15; Player[2].speed = 3;
+    Dog[0].speed = 5;
+    SB[0].speed = 20;
+
+    
+}
+
+

@@ -38,6 +38,52 @@ void image_to_frame(Animation ob[], int number){
     }
 }
 
-void BounderyBox(Frame XY[]){
-    
+void CLEAR_graphic(Animation ob[]){
+    // Release the bitmap data and then exit//
+	for (int i=0; i< ob[cat_1].aFPS; i++){/*ob*/
+		al_destroy_bitmap(ob[cat_1].frame[i]);/*ob*/
+	}
+	for (int i=0; i< ob[cat_1_s].aFPS; i++){/*ob*/
+		al_destroy_bitmap(ob[cat_1_s].frame[i]);/*ob*/
+	}
+	for (int i=0; i< ob[dog_1].aFPS; i++){/*ob*/
+		al_destroy_bitmap(ob[dog_1].frame[i]);/*ob*/
+	}
+	for (int i=0; i< ob[dog_1_s].aFPS; i++){/*ob*/
+		al_destroy_bitmap(ob[dog_1_s].frame[i]);/*ob*/
+	}
+	al_destroy_bitmap(ob[0].image);
+    al_destroy_bitmap(ob[snowb_s].image);
+    al_destroy_bitmap(ob[shadow].image);
+    al_destroy_bitmap(ob[heart_r].image);
+    al_destroy_bitmap(ob[heart_g].image);
+}
+
+void BounderyBox(HitBox XY[], LDog m[], int num, int i){
+    if(num < 10){//Cat colour
+        al_draw_rectangle(XY[num].bx, XY[num].by, 
+            XY[num].bx + XY[num].W, XY[num].by + XY[num].H, pink, 5);
+    }else{//Dog colour
+        al_draw_rectangle(m[i].dog_hitbox.bx, m[i].dog_hitbox.by, 
+            m[i].dog_hitbox.bx + XY[num].W, m[i].dog_hitbox.by + XY[num].H, purple, 5);
+    }
+}
+
+void Shadows(Animation ob[], HitBox XY[], LDog m[], int member){
+    al_draw_bitmap(ob[shadow].image, XY[cat_1].sdx - 48, XY[cat_1].sdy - 20, 0);//For Cat
+    for(int i = 0; i< member; i++){
+        al_draw_bitmap(ob[shadow].image, m[i].dog_hitbox.sdx - 48, m[i].dog_hitbox.sdy - 20, 0);//For Dog
+    }
+}
+
+void LifeBar(Animation ob[], HitBox XY[], LDog m[], int member){
+    //First Life
+    al_draw_bitmap(ob[heart_r].image, XY[cat_1].lx, XY[cat_1].ly, 0);//For Cat
+    al_draw_bitmap(ob[heart_r].image, XY[cat_1].lx + 42, XY[cat_1].ly, 0);
+    al_draw_bitmap(ob[heart_r].image, XY[cat_1].lx + 84, XY[cat_1].ly, 0);
+    for(int i = 0; i< member; i++){
+        al_draw_bitmap(ob[heart_r].image, m[i].dog_hitbox.lx, m[i].dog_hitbox.ly, 0);//For Dog
+        al_draw_bitmap(ob[heart_r].image, m[i].dog_hitbox.lx + 42, m[i].dog_hitbox.ly, 0);
+        al_draw_bitmap(ob[heart_r].image, m[i].dog_hitbox.lx + 84, m[i].dog_hitbox.ly, 0);
+    }
 }
