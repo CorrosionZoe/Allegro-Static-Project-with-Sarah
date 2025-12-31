@@ -10,8 +10,8 @@ int main(int argc, char *argv[]){
 	//Install and initialize struct//
     al_init();
     al_install_keyboard(); al_init_image_addon(); al_init_ttf_addon(); al_init_font_addon(); al_install_mouse(); // initialize addons
-	Animation ob[OB_CONTAINER]; HitBox XY[OB_CONTAINER]; LDog m[OB_CONTAINER];//Animation,Location, and NPC values
-	Entity Player[3]; Entity Dog[4]; Entity SB[1];//Entities
+	Animation ob[OB_CONTAINER]; Location C[OB_CONTAINER]; DogNPC D[OB_CONTAINER];//Animation,Location, and NPC values
+	Entity Player[3]; Entity Dog[2]; Entity SB[1];//Entities
       // create two images
 	STORE_struct(ob, Player, Dog, SB);
 
@@ -53,11 +53,14 @@ int main(int argc, char *argv[]){
 	int curr = 0; int currs = 0;
 	//Player position
 	int x = 0; int y = 0;
-	//Px+Py
-    XY[cat_1].px = 100; XY[cat_1].py = 300;
-	//Dogs position
+	//FLAG BOOL for the player
+	bool flags = 0; int Player_Choice = Ocat;
+	//Px+Py                                //Mouse x and y
+    C[cat_1].px = 100; C[cat_1].py = 300; int mx = 0; int my = 0;
+	//Dogs members
 	int members = 1;
-	INIT_location(XY, m, members);
+	//Initialize their location for each game
+	INIT_location(C, D, members);
 	//curr set
 	// memset(curr, -1, sizeof(curr));
 	
@@ -65,16 +68,14 @@ int main(int argc, char *argv[]){
 	/***—————————————————Timer———————————————————***/
 
 	//GAME BOOL
-	bool game_start = true; bool menu = false; bool throwing; bool showingsnowball = false;
+	bool game_start = true; bool menu = false; bool throwing = false; bool showingsnowball = false; bool Aiming = false;
+	bool collecting = false;
 	//KEY BOOL
 	bool left = false; bool right = false; bool up = false; bool down = false; bool exit = false; bool showBB = false;
-	//FLAG BOOL
-	bool flags = 0; 
-	//DOG FLAG + DOG INT                                   //BB INT
-	int BB_timer = 0;
+	//Timer
+	int collect_timer = 0;
 
 	//Text file scanning
-	int Player_Choice = 0;
 	READ_files(disp, Player, Player_Choice, exit);
 
 	al_start_timer(timer);	//Start the timer.
@@ -88,6 +89,9 @@ int main(int argc, char *argv[]){
       	if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE || ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
         	exit = true;
       	}
+		else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES){
+			mx = ev.mouse.x; my = ev.mouse.y;
+		}
         else if(ev.type == ALLEGRO_EVENT_TIMER) {
 			//Set game buffer to the screen
 			al_set_target_bitmap(game_buffer);
@@ -113,154 +117,145 @@ int main(int argc, char *argv[]){
 				al_draw_bitmap(ob[0].image, 0, 0, 0);
 				
 				//Update Boundaries(Hitboxes)
-				Boundary_update(XY, m, members);
+				Boundary_update(C, D, members);
 
 				//Updating and showing shadows
-				Shadows_update(XY, m, members);
-				Shadows(ob, XY, m, members);
+				Shadows_update(C, D, members);
+				Shadows(ob, C, D, members);
 
 				//Updating Life
-				Life_update(XY, m, members);
+				Life_update(C, D, members);
 
 				// iNITIALIZE THE BOUNDARY DETECTION FUNCTION
-				//Boundary_Detection(XY);
+				//Boundary_Detection(C);
 
 				if(showingsnowball == true){
 					al_draw_bitmap(ob[snowb_s].image, 50, 20, 0);
 				}
 
-				//------------Cat Moving(Player)-----------
-				if(left == true || right == true || up == true || down == true){   //Moving Animation
-					Timer_Part_1(curr, ob, XY, cat_1, cat_1, x, y);
-					Timer_Part_2(curr, ob, XY, flags, cat_1, cat_1);
-				}else{  //Silent Animation
-					Timer_Part_1(currs, ob, XY, cat_1_s, cat_1, x, y);
-					Timer_Part_2(currs, ob, XY, flags, cat_1_s, cat_1);
-				}
-			
 				//----------------Dog Moving---------------
 
 				//First Step: Dog choosing the movement(One time task until the movement is finished)
 				for(int i = 0; i < members; i++){
-					if(m[i].dog_choice == true){
-					m[i].choice = Dog_Choice();
-					m[i].dog_choice = false;
-					}
+					Dog_NPC_Function(D, C, Dog, ob, i);
+				}
 
-					// //Decide the moving and silent animation
-					if(m[i].choice != 0){ //Moving
-						if(m[i].dog_pause == true){  //(One time task until the movement is finished)
-						m[i].dog_move = rand()%5 + 1;  //How many seconds(1-5)
-						Dog_Move(Dog, m, i);  //This is get the dog moving choice and the flag
-						m[i].dog_pause = false;
-						}
-
-						m[i].dog_timer ++;
-
-						if(m[i].dog_timer < FPS * m[i].dog_move){
-							Timer_Part_1_for_Dog(m, ob, XY, dog_1, i);
-							Timer_Part_2_for_Dog(m, ob, dog_1, i);
-						}else{
-							m[i].dog_timer = 0;
-							m[i].dog_pause = true; m[i].dog_choice = true;//Reset the bool
-						}
-					}else{ //Silent
-						if(m[i].dog_pause == true){
-							m[i].dog_rest = rand()%3 + 3;//(3-5)
-							m[i].x = 0; m[i].y = 0;
-							m[i].dog_pause = false;
-						}
-
-						m[i].dog_timer ++;
-
-						if(m[i].dog_timer < FPS * m[i].dog_rest){
-							Timer_Part_1_for_Dog(m, ob, XY, dog_1_s, i);
-							Timer_Part_2_for_Dog(m, ob, dog_1_s, i);
-						}else{
-							m[i].dog_timer = 0;
-							m[i].dog_pause = true; m[i].dog_choice = true;//Reset the bool
-						}
-					}
+				//------------Cat Moving(Player)-----------
+				if(left == true || right == true || up == true || down == true){   //Moving Animation
+					Timer_Part_1(curr, ob, C, cat_1, cat_1, x, y);
+					Timer_Part_2(curr, ob, C, flags, cat_1, cat_1);
+				}else{  //Silent Animation
+					Timer_Part_1(currs, ob, C, cat_1_s, cat_1, x, y);
+					Timer_Part_2(currs, ob, C, flags, cat_1_s, cat_1);
 				}
 				
-				
+				//Show bounderies
+				if(showBB == true){
+					BounderyBox(C, D, cat_1, 0);
+					for(int i = 0; i< members; i++){
+						BounderyBox(C, D, dog_1, i);
+					}
+				}
+
+				//Showing Life Bars
+				LifeBar(ob, C, D, members);
+
+				//Collecting the snowball and Show aiming line
+				if(Aiming == true){
+					if(Player[Player_Choice].snowball == 0){
+						collecting = true;	
+						collect_timer ++;
+						Collecting_snowball(C, Player, Player_Choice, collect_timer);
+					}else{
+						collecting = false;
+						Aiming_Line(C, mx, my);
+					}
+				}
+
 			} 
-
-			//Show bounderies
-			if(showBB == true){
-				BounderyBox(XY, m, cat_1, 0);
-				for(int i = 0; i< members; i++){
-					BounderyBox(XY, m, dog_1, i);
-				}
-				BB_timer = 1;
-			}
-
-			//Showing Life Bars
-			LifeBar(ob, XY, m, members);
 
 			//Create Fullscreen functions
 			al_set_target_bitmap(al_get_backbuffer(disp));
 			scale_buffer(disp, game_buffer);
-
+			
 			//Make the screen
 			al_flip_display();
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_DOWN){
 			switch(ev.keyboard.keycode) {
+				case ALLEGRO_KEY_W:
 				case ALLEGRO_KEY_UP:
-               		up = true; y = 0 - Player[Player_Choice].speed; flags = 0;
+					if(collecting == false){
+						up = true; y = 0 - Player[Player_Choice].speed;
+					}
                		break;
+				case ALLEGRO_KEY_S:
 				case ALLEGRO_KEY_DOWN:
-					down = true; y = Player[Player_Choice].speed; flags = 0;
+					if(collecting == false){
+					down = true; y = Player[Player_Choice].speed;
+					}
                		break;
+				case ALLEGRO_KEY_D:
             	case ALLEGRO_KEY_RIGHT:
+					if(collecting == false){
 					right = true; x = Player[Player_Choice].speed; flags = 0;
+					}
                		break;
+				case ALLEGRO_KEY_A:
 	            case ALLEGRO_KEY_LEFT:
+					if(collecting == false){
 					left = true; x = 0 - Player[Player_Choice].speed; flags = 1;
+					}
             		break;
 				case ALLEGRO_KEY_F11:
 					toggleCheck(disp);
 					break;
 				case ALLEGRO_KEY_B:
-					if(BB_timer == 0){
+					if(showBB == false){
 						showBB = true;
 					}else{
 						showBB = false;
-						BB_timer = 0;
 					}
 					break;
-            	case ALLEGRO_KEY_ESCAPE:
-    		        exit = true;
-            		break;
+				case ALLEGRO_KEY_LSHIFT:
+					if(Aiming == false){
+						Aiming = true;
+					}else{
+						Aiming = false;
+					}
+					break;
 				case ALLEGRO_KEY_SPACE:
 				// draw snowball
 					showingsnowball = true;
 					break;
+				case ALLEGRO_KEY_ESCAPE:
+    		        exit = true;
+            		break;
 			}
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_UP){
 			switch(ev.keyboard.keycode) {
+				case ALLEGRO_KEY_W:
 				case ALLEGRO_KEY_UP:
                		up = false;
 					y = 0;
                		break;
+				case ALLEGRO_KEY_S:
 				case ALLEGRO_KEY_DOWN:
 					down = false;
 					y = 0;
                		break;
+				case ALLEGRO_KEY_D:
             	case ALLEGRO_KEY_RIGHT:
 					right = false;
 					x = 0;
                		break;
+				case ALLEGRO_KEY_A:
 	            case ALLEGRO_KEY_LEFT:
 					left = false;
 					x = 0;
             		break;
 			}
-		}
-		else if(ev.type == 	ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-			
 		}
 	}
 
@@ -274,7 +269,7 @@ int main(int argc, char *argv[]){
 
 // Snowball for Dog
 //for (int i = 0; i < 1000; i++) {
-//	al_draw_filled_circle(XY[cat_1].bx, XY[cat_1].by, 10, white);
+//	al_draw_filled_circle(C[cat_1].bx, C[cat_1].by, 10, white);
 	
 //	(100 + i, 250, 50);
 //	al_rest//delay(10);

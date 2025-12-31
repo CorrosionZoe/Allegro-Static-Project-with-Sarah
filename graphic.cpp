@@ -9,15 +9,12 @@ void animation(Animation ob[], int number){
         ob[number].frame[i] = al_load_bitmap(location);
     }
 }
-/* code for just a template to make a shape
-void shape(){
-    // paint rectangle  (x1, y1, x2, y2, colour) - Upper left and lower right points of the rectangle
-	al_draw_filled_rectangle(0, 0, 100, 50, pink);
-	al_draw_filled_circle(SCREEN_W-60, 60, 50, pink);
-	al_draw_circle(SCREEN_W-90, SCREEN_H -90, 80, pink, 10);		// last parameter is thickness of line
-	al_draw_line(0, SCREEN_H, 110, 550, pink, 25);
+
+void Aiming_Line(Location XY[], int x, int y){
+    al_draw_filled_circle(x, y, 10, blue);
+    // draw line  (x1, y1, x2, y2, colour, thickness) - Upper left and lower right points
+	al_draw_line(XY[cat_1].bx + XY[cat_1].W / 2, XY[cat_1].by + XY[cat_1].H / 2, x, y, blue, 5);
 }
-*/
 
 // function to make the text appear 
 void text(ALLEGRO_FONT* font){
@@ -59,31 +56,32 @@ void CLEAR_graphic(Animation ob[]){
     al_destroy_bitmap(ob[heart_g].image);
 }
 
-void BounderyBox(HitBox XY[], LDog m[], int num, int i){
+void BounderyBox(Location XY[], DogNPC m[], int num, int i){
     if(num < 10){//Cat colour
         al_draw_rectangle(XY[num].bx, XY[num].by, 
             XY[num].bx + XY[num].W, XY[num].by + XY[num].H, pink, 5);
     }else{//Dog colour
-        al_draw_rectangle(m[i].dog_hitbox.bx, m[i].dog_hitbox.by, 
-            m[i].dog_hitbox.bx + XY[num].W, m[i].dog_hitbox.by + XY[num].H, purple, 5);
+        al_draw_rectangle(m[i].dog_XY.bx, m[i].dog_XY.by, 
+            m[i].dog_XY.bx + XY[num].W, m[i].dog_XY.by + XY[num].H, purple, 5);
     }
 }
 
-void Shadows(Animation ob[], HitBox XY[], LDog m[], int member){
+void Shadows(Animation ob[], Location XY[], DogNPC m[], int member){
     al_draw_bitmap(ob[shadow].image, XY[cat_1].sdx - 48, XY[cat_1].sdy - 20, 0);//For Cat
     for(int i = 0; i< member; i++){
-        al_draw_bitmap(ob[shadow].image, m[i].dog_hitbox.sdx - 48, m[i].dog_hitbox.sdy - 20, 0);//For Dog
+        al_draw_bitmap(ob[shadow].image, m[i].dog_XY.sdx - 48, m[i].dog_XY.sdy - 20, 0);//For Dog
     }
 }
 
-void LifeBar(Animation ob[], HitBox XY[], LDog m[], int member){
+void LifeBar(Animation ob[], Location XY[], DogNPC m[], int member){
+    int distense = 42;
     //First Life
     al_draw_bitmap(ob[heart_r].image, XY[cat_1].lx, XY[cat_1].ly, 0);//For Cat
-    al_draw_bitmap(ob[heart_r].image, XY[cat_1].lx + 42, XY[cat_1].ly, 0);
-    al_draw_bitmap(ob[heart_r].image, XY[cat_1].lx + 84, XY[cat_1].ly, 0);
+    al_draw_bitmap(ob[heart_r].image, XY[cat_1].lx + distense, XY[cat_1].ly, 0);
+    al_draw_bitmap(ob[heart_r].image, XY[cat_1].lx + distense * 2, XY[cat_1].ly, 0);
     for(int i = 0; i< member; i++){
-        al_draw_bitmap(ob[heart_r].image, m[i].dog_hitbox.lx, m[i].dog_hitbox.ly, 0);//For Dog
-        al_draw_bitmap(ob[heart_r].image, m[i].dog_hitbox.lx + 42, m[i].dog_hitbox.ly, 0);
-        al_draw_bitmap(ob[heart_r].image, m[i].dog_hitbox.lx + 84, m[i].dog_hitbox.ly, 0);
+        al_draw_bitmap(ob[heart_r].image, m[i].dog_XY.lx, m[i].dog_XY.ly, 0);//For Dog
+        al_draw_bitmap(ob[heart_r].image, m[i].dog_XY.lx + distense, m[i].dog_XY.ly, 0);
+        al_draw_bitmap(ob[heart_r].image, m[i].dog_XY.lx + distense * 2, m[i].dog_XY.ly, 0);
     }
 }

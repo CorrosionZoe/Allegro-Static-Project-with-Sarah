@@ -102,13 +102,13 @@ void toggleCheck(ALLEGRO_DISPLAY *disp){
 }
 
 // function to check the location of the dog
-void INIT_location(HitBox XY[], LDog m[], int member){
+void INIT_location(Location XY[], DogNPC m[], int member){
     XY[cat_1].W = 55; XY[cat_1].H = 129;
-    XY[dog_1].W = 111; XY[dog_1].H = 268;
+    XY[dog_1].W = 50; XY[dog_1].H = 160;
     srand(time(0));
     for(int i = 0; i < member; i++){
-        m[i].dog_hitbox.px = rand()%700+1;
-        m[i].dog_hitbox.py = rand()%370+31;
+        m[i].dog_XY.px = rand()%700+1;
+        m[i].dog_XY.py = rand()%370+31;
     }
 }
 
@@ -146,12 +146,12 @@ void STORE_struct(Animation ob[], Entity Player[], Entity Dog[], Entity SB[]){
     //1 ----- Cat staying(original)
     ob[cat_1_s].aFPS = 13; strcpy(ob[cat_1_s].name, "Cat_S"); ob[cat_1_s].frame = NULL;
     //2----- Cat moving(original)
-    ob[cat_1].aFPS = 6; strcpy(ob[cat_1].name, "Cat"); ob[cat_1].frame = NULL;
+    ob[cat_1].aFPS = 8; strcpy(ob[cat_1].name, "Cat"); ob[cat_1].frame = NULL;
     //4
     //10 ----- Dog NPC staying(original)
-    ob[dog_1_s].aFPS = 13; strcpy(ob[dog_1_s].name, "Cat_S"); ob[dog_1_s].frame = NULL;
+    ob[dog_1_s].aFPS = 11; strcpy(ob[dog_1_s].name, "Dog_S"); ob[dog_1_s].frame = NULL;
     //11 ----- Dog NPC moving(original)
-    ob[dog_1].aFPS = 3; strcpy(ob[dog_1].name, "Dog"); ob[dog_1].frame = NULL;
+    ob[dog_1].aFPS = 9; strcpy(ob[dog_1].name, "Dog"); ob[dog_1].frame = NULL;
     //20 ----- Snowball!(original)
     ob[snowb_s].image = NULL; ob[snowb_s].image = al_load_bitmap("Image/SnowBall_O.png");
     //22 ----- Shadow
@@ -166,9 +166,9 @@ void STORE_struct(Animation ob[], Entity Player[], Entity Dog[], Entity SB[]){
     
     // /*                 Entity Structure                 */
     //Speed
-    Player[0].speed = 5; Player[1].speed = 15; Player[2].speed = 3;
-    Dog[0].speed = 5;
-    SB[0].speed = 20;
+    Player[Ocat].speed = 7; Player[Bcat].speed = 15; Player[Gcat].speed = 5;
+    Dog[Gdog].speed = 5;
+    SB[Ocat].speed = 20;
 
     
 }
