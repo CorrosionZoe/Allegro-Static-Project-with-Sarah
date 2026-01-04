@@ -10,9 +10,7 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_primitives.h>
 #include <math.h>
-
-
-//ALL GLOBAL VARIABLES
+/*                 ALL GLOBAL VARIABLES                 */
 //define COLOUR
 #define pink al_map_rgb(255, 12, 174)
 #define purple al_map_rgb(105, 56, 255)
@@ -20,6 +18,10 @@
 #define black al_map_rgb(0, 0, 0)
 #define blue al_map_rgba(0, 185, 230, 128)
 #define red al_map_rgb(37, 150, 190)
+#define green al_map_rgb(107, 242, 208)
+#define titleblue al_map_rgb(29, 63, 89)
+#define titlegreen al_map_rgb(29, 89, 69)
+#define infoblue al_map_rgb(174, 239, 255)
 
 //Basic Settings
 #define SCREEN_W 1000
@@ -29,7 +31,7 @@
 #define OB_CONTAINER 30
 #define COLLECT_TIME 3
 
-//Animation define
+//Define Animation
 #define cat_1_s 1 // cat is still
 #define cat_1 2 // cat is moving
 #define dog_1_s 10 //  dog is still
@@ -39,13 +41,14 @@
 #define heart_r 23 //Red Heart
 #define heart_g 24 //Gray Heart
 
-//Define speices(Expirimental)
+//Define species(Experimental)
 #define Ocat 0 
 #define Bcat 1
 #define Gcat 2
 #define Gdog 0
 
-//ALL Structures
+/*-----ALL STRUCTURES -----*/
+// Structure for Animation
 struct Animation{
     int aFPS;
     char name[50];
@@ -53,24 +56,29 @@ struct Animation{
     ALLEGRO_BITMAP * image;
 };
 
+//Structure for information for each character Cat and Dog
+struct Entity{
+    char name[50]; // Character name
+    float speed; //Character speed
+    int power; // Character power
+    int snowball = 0; // number of snowball
+    int life = 3; // number of life
+    int specie; // specie type
+    int W; int H; //Width and Height for the hitbox
+    // bool left = false; bool right = false; bool up = false; bool down = false;
+};
+
+//Structure for location of images
 struct Location{
-    int W; int H; //Width and Hight for the hitbox
     int px; int py; //the location that draws the image
     int bx; int by; //the location that draws the hitbox
     int sdx; int sdy; //the middle location of the shadow
     int lx; int ly; // The location of the first life
-};
-
-struct Entity{
-    char name[50];
-    int speed;
-    int power;
-    int snowball = 0;
     int life = 3;
-    int specie;
-    // bool left = false; bool right = false; bool up = false; bool down = false;
 };
 
+
+//Structure to control the movement of the Dog NPC
 struct DogNPC{
     int curr = 0;
     int x = 0; int y = 0;
@@ -78,15 +86,15 @@ struct DogNPC{
     bool dog_pause = true; bool dog_choice = true;
     int flag = 0;
     int dog_rest = 0; int dog_move = 0; int dog_timer = 0; int BB_timer = 0;
+    int life = 3;
     Location dog_XY;
 };
 
-
-// ALL PROTYPES
+/*-----ALL PROTOTYPES -----*/
 //Storing Animation Information(allegro.cpp)🔉
 void STORE_struct(Animation ob[], Entity Player[], Entity Dog[], Entity SB[]);
 void ARRAY_frame(Animation ob[], int number);
-void INIT_location(Location C[], DogNPC m[], int member);
+void INIT_location(DogNPC D[], Entity Player[], Entity Dog[], Entity SB[], int member);
 
 // Check the ERROR(allegro.cpp)❌
 int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer, ALLEGRO_FONT* font, Animation ob[], ALLEGRO_BITMAP *icon_32, ALLEGRO_BITMAP *game_buffer);
@@ -95,35 +103,40 @@ void toggleCheck(ALLEGRO_DISPLAY *disp);
 void scale_buffer(ALLEGRO_DISPLAY *disp, ALLEGRO_BITMAP *game_buffer);
 
 //Read Files📄
-void READ_files(ALLEGRO_DISPLAY *disp, Entity Player[], int &Cat_Specie, bool &exit);
+int READ_files(ALLEGRO_DISPLAY *disp, Entity Player[], int &Cat_Specie);
 
 //Graphic Part(graphic.cpp)🖼️
 void animation(Animation ob[], int number); //scan images and put them into frame array
-void Aiming_Line(Location C[], int x, int y); // Drawing the aiming line
+void Aiming_Line(Location C, Entity Player[], int x, int y); // Drawing the aiming line
 void text(ALLEGRO_FONT* font);//font Templates
 void CLEAR_graphic(Animation ob[]);//Clearing all the graphic
 void image_to_frame(Animation ob[], int number);//Cut image into pieces and turn them to frame array
-void BounderyBox(Location C[], DogNPC m[], int num, int i);
-void Shadows(Animation ob[], Location C[], DogNPC m[], int member); //Prototype for showing shadows
-void LifeBar(Animation ob[], Location C[], DogNPC m[], int member); //Prototype for showing life
+void BounderyBox(Location C, Location S, DogNPC D[], Entity Player[], Entity Dog[], Entity SB[], int members, bool snowball);
+void Shadows(Animation ob[], Location C, DogNPC D[], int member); //Prototype for showing shadows
+void LifeBar(Animation ob[], Location C, DogNPC D[], Entity Player[], Entity Dog[], int c, int member); //Prototype for showing life
 
 //Main Animation Functions(animation.cpp)🏃‍♂️
-void Timer_Part_1(int &curr, Animation ob[], Location C[], int aniID, int posID, int x, int y);
-void Timer_Part_2(int &curr, Animation ob[], Location C[], int F, int aniID, int posID);
-void Timer_Part_1_for_Dog(DogNPC m[], Animation ob[], Location C[], int aniID, int i);
-void Timer_Part_2_for_Dog(DogNPC m[], Animation ob[], int aniID, int i);
+void Timer_Part_1(int &curr, Animation ob[], Location &C, Entity Player[], int aniID, int x, int y);
+void Timer_Part_2(int &curr, Animation ob[], Location C, int F, int aniID);
+void Timer_Part_1_for_Dog(DogNPC D[], Animation ob[], Entity Dog[], int aniID, int i);
+void Timer_Part_2_for_Dog(DogNPC D[], Animation ob[], int aniID, int i);
+void Snowball_thrown(Entity Player[], Entity SB[], Animation ob[], Location &S,
+	int x, int x1, int y, int y1, int choice, bool &throwing, bool &Aiming, bool &init);
+
 
 //Entity Functions(game_functions.cpp)🐶
 int Dog_Choice();
-void Dog_Move(Entity Dog[], DogNPC m[], int number, int specie);
-void Dog_NPC_Function(DogNPC m[], Location C[], Entity Dog[], Animation ob[], int i);
-void Shadows_update(Location C[], DogNPC m[], int member);
-void Life_update(Location C[], DogNPC m[], int member);
-void Collecting_snowball(Location C[], Entity Player[], int choice, int timer);
+void Dog_Move(Entity Dog[], DogNPC D[], int number, int specie);
+void Dog_NPC_Function(DogNPC D[], Entity Dog[], Animation ob[], int i);
+void Shadows_update(Location &C, DogNPC D[], Entity Player[], Entity Dog[], int member);
+void Life_update(Location &C, Location S, DogNPC D[], Entity SB[], Entity Player[], Entity Dog[], int member, int choice, bool &D_reduce);
+void Collecting_snowball(Location C, Entity Player[], int choice, int &timer);
+void False_snowball(Entity Player[], Location &S, int C, bool &T, bool &A, bool &I);
+
 //Prototype for Boundary Detection Function
-void Boundary_update(Location C[], DogNPC m[], int member);
-void Boundary_Detection(Location C[], Animation ob[], ALLEGRO_FONT *font);
-bool isCollision(Location C[], int b1, int b2);
+void Boundary_update(Location &C, Location &S, DogNPC D[], Entity Dog[], int member);
+//void Boundary_Detection(Location C, DogNPC D[], Animation ob[], ALLEGRO_FONT *font);
+//bool isCollision(Location C, DogNPC D[], int b1, int b2);
 
 /*
 int initializeAllegro(int width, int height, const char title[]);

@@ -1,59 +1,64 @@
 /*Zoe and Sarah*/
 #include "winter.h"
 
-// Function to check errors.
+//Function to check errors (Display, buffer, event queue, font, snow background, cat animation, dog animation, snowball image, timer, icon)//
 int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer, ALLEGRO_FONT* font, Animation ob[], ALLEGRO_BITMAP *icon_32, ALLEGRO_BITMAP *game_buffer){
-    //AL
+    //ALL//
     int Enum = 0;
-    if(!disp){
+    if(!disp){ //If statement to print error if the display is not loaded properly//
         al_show_native_message_box(disp, "Error", "EEE404", "Fail to display", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
         Enum ++;
     }
-    if(!game_buffer){
+    if(!game_buffer){ //If statement to print error if the buffer is not loaded properly//
         al_show_native_message_box(disp, "Error", "EEE404", "Fail to load the buffer", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
         Enum ++;
     }
-    if (!EQ) {
+    if (!EQ) { //If statement to print error if the event queue is not loaded properly//
 		al_show_native_message_box(disp, "Error", "Error", "Failed to create event_queue!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
 		al_destroy_display(disp);
       	Enum ++;
 	}
-    if (!font){
-      al_show_native_message_box(disp, "Error", "Error", "Could not load ShortBaby.ttf",
+    if (!font){ //If statement to print error if the shortbaby font is not loaded properly//
+      al_show_native_message_box(disp, "Error", "Error", "Could not load ShortBaby font",
                                     nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       Enum ++;
     }
-    if (!ob[0].image) {
-		al_show_native_message_box(disp, "Error", "Error", "Failed to load Background!",
+    if (!font){ //If statement to print error if the brt font is not loaded properly//
+      al_show_native_message_box(disp, "Error", "Error", "Could not load brt font",
+                                    nullptr, ALLEGRO_MESSAGEBOX_ERROR);
+      Enum ++;
+      }
+    if (!ob[0].image) { //If statement to print error if the background is not loaded properly//
+		al_show_native_message_box(disp, "Error", "Error", "Failed to load background image!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	al_destroy_display(disp);
      	Enum ++;
 	}
-    if (!ob[cat_1].frame || !ob[cat_1_s].frame) {
-		al_show_native_message_box(disp, "Error", "Error", "Failed to load Cat animation!",
+    if (!ob[cat_1].frame || !ob[cat_1_s].frame) { //If statement to print error if the cat animation is not loaded properly//
+		al_show_native_message_box(disp, "Error", "Error", "Failed to load cat animation!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	al_destroy_display(disp);
      	Enum ++;
 	}
-    if (!ob[dog_1].frame || !ob[dog_1_s].frame) {
-		al_show_native_message_box(disp, "Error", "Error", "Failed to load Dog animation!",
+    if (!ob[dog_1].frame || !ob[dog_1_s].frame) { //If statement to print error if the dog animation is not loaded properly//
+		al_show_native_message_box(disp, "Error", "Error", "Failed to load dog animation!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	al_destroy_display(disp);
      	Enum ++;
 	}
-    if (!ob[snowb_s].image) {
-		al_show_native_message_box(disp, "Error", "Error", "Failed to load Snowball!",
+    if (!ob[snowb_s].image) { //If statement to print error if the snowball is not loaded properly//
+		al_show_native_message_box(disp, "Error", "Error", "Failed to load snowball image!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	al_destroy_display(disp);
      	Enum ++;
 	}
-    if (!timer) {
+    if (!timer) { //If statement to print error if the timer is not loaded properly//
    		al_show_native_message_box(disp, "Error", "Error", "Failed to create timer!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
         Enum ++;
     }
-    if (!icon_32) {
+    if (!icon_32) { //If statement to print error if the icon is not loaded properly//
    		al_show_native_message_box(disp, "Error", "Error", "Failed to load icon!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
         Enum ++;
@@ -61,25 +66,25 @@ int ERROR(ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE * EQ, ALLEGRO_TIMER * timer
     return Enum;
 }
 
-// function to ensure no error in addon
+//Function to ensure no error in addon//
 int addonCheck(ALLEGRO_DISPLAY *disp){
-    //al
+    //If statement to print error if the primitives is not loaded properly//
     if (!al_init_primitives_addon()) {
-    	al_show_native_message_box(disp, "Error", "Error", "Failed to initialize primatives addon!",
+    	al_show_native_message_box(disp, "Error", "Error", "Failed to initialize primitives addon!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
     	return -1;
 	}
-    if (!al_init_image_addon()) {
+    if (!al_init_image_addon()) { //If statement to print error if the addon image is not loaded properly//
     	al_show_native_message_box(disp, "Error", "Error",
     		"Failed to initialize image addon!", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
     	return -1;
 	}
-    if (!al_install_keyboard()) {
+    if (!al_install_keyboard()) { //If statement to print error if the keyboard feature does not work properly//
 	    al_show_native_message_box(disp, "Error", "Error", "failed to initialize the keyboard!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	return -1;
    	}
-    if (!al_install_mouse()) {
+    if (!al_install_mouse()) { //If statement to print error if the mouse feature does not work properly//
 	    al_show_native_message_box(disp, "Error", "Error", "failed to initialize the mouse!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       	return -1;
@@ -87,31 +92,34 @@ int addonCheck(ALLEGRO_DISPLAY *disp){
     return 0;
 }
 
-//function for animation
+//Function to store image frames for animation in an array//
 void ARRAY_frame(Animation ob[], int number){
     int store = ob[number].aFPS;
     ob[number].frame = (ALLEGRO_BITMAP**)malloc(store * sizeof(ALLEGRO_BITMAP*));
 }
 
-// function to switch between small and full window screen.
+//Function to switch between small and full window screen//
 void toggleCheck(ALLEGRO_DISPLAY *disp){
-    int flags = al_get_display_flags(disp); //
+    int flags = al_get_display_flags(disp); 
     bool is_fullscreen = (flags & ALLEGRO_FULLSCREEN_WINDOW);
     int new_state = is_fullscreen ? 0 : 1;
     al_set_display_flag(disp, ALLEGRO_FULLSCREEN_WINDOW, new_state);
 }
 
-// function to check the location of the dog
-void INIT_location(Location XY[], DogNPC m[], int member){
-    XY[cat_1].W = 55; XY[cat_1].H = 129;
-    XY[dog_1].W = 50; XY[dog_1].H = 160;
+//Function to check the location of the dog//
+void INIT_location(DogNPC D[], Entity Player[], Entity Dog[], Entity SB[], int member){
+    Player[Ocat].W = 55; Player[Ocat].H = 129;
+    Dog[Gdog].W = 50; Dog[Gdog].H = 160;
+    SB[Ocat].W = 33; SB[Ocat].H = 38;
+
     srand(time(0));
-    for(int i = 0; i < member; i++){
-        m[i].dog_XY.px = rand()%700+1;
-        m[i].dog_XY.py = rand()%370+31;
+    for(int i = 0; i < member; i++){ //For loop for dog to randomly move//
+        D[i].dog_XY.px = rand()%700+1;
+        D[i].dog_XY.py = rand()%370+31;
     }
 }
 
+//Function to adjust display screen from small size to big size and vice versa//
 void scale_buffer(ALLEGRO_DISPLAY *disp, ALLEGRO_BITMAP *game_buffer){
     int screen_w = al_get_display_width(disp);
     int screen_h = al_get_display_height(disp);
@@ -137,40 +145,39 @@ void scale_buffer(ALLEGRO_DISPLAY *disp, ALLEGRO_BITMAP *game_buffer){
     al_flip_display();
 }
 
-// function to store the images of the animation, cat, and dog.
+//Function to store the images of the animation, cat, and dog//
 void STORE_struct(Animation ob[], Entity Player[], Entity Dog[], Entity SB[]){
     /*              Animation Structure                 */
-
-    //Game Begin: 0 ----- Background
+    //Game Begin: 0 ----- Background//
     ob[0].image = NULL; ob[0].image = al_load_bitmap("Image/SnowBG.jpeg");
-    //1 ----- Cat staying(original)
+    //1 ----- Cat staying(original)//
     ob[cat_1_s].aFPS = 13; strcpy(ob[cat_1_s].name, "Cat_S"); ob[cat_1_s].frame = NULL;
-    //2----- Cat moving(original)
+    //2----- Cat moving(original)//
     ob[cat_1].aFPS = 8; strcpy(ob[cat_1].name, "Cat"); ob[cat_1].frame = NULL;
     //4
-    //10 ----- Dog NPC staying(original)
+    //10 ----- Dog NPC staying(original)//
     ob[dog_1_s].aFPS = 11; strcpy(ob[dog_1_s].name, "Dog_S"); ob[dog_1_s].frame = NULL;
-    //11 ----- Dog NPC moving(original)
+    //11 ----- Dog NPC moving(original)//
     ob[dog_1].aFPS = 9; strcpy(ob[dog_1].name, "Dog"); ob[dog_1].frame = NULL;
-    //20 ----- Snowball!(original)
+    //20 ----- Snowball!(original)//
     ob[snowb_s].image = NULL; ob[snowb_s].image = al_load_bitmap("Image/SnowBall_O.png");
-    //22 ----- Shadow
+    //22 ----- Character Shadow//
     ob[shadow].image = NULL; ob[shadow].image = al_load_bitmap("Image/GShadow.png");
-    //23 ----- Red Heart(Alive)
+    //23 ----- Red Heart(Alive)//
     ob[heart_r].image = NULL; ob[heart_r].image = al_load_bitmap("Image/Heart.png");
-    //24 ----- Gray Heart(Dead)
+    //24 ----- Gray Heart(Dead)//
     ob[heart_g].image = NULL; ob[heart_g].image = al_load_bitmap("Image/GrayHeart.png");
 
 
     //-----------------------------------------------------------
     
-    // /*                 Entity Structure                 */
-    //Speed
+    /*                 Entity Structure                 */
+    //Entity Speed//
     Player[Ocat].speed = 7; Player[Bcat].speed = 15; Player[Gcat].speed = 5;
     Dog[Gdog].speed = 5;
-    SB[Ocat].speed = 20;
-
-    
+    SB[Ocat].speed = 20;   
+    //Entity power//
+    Player[Ocat].power = 15; Player[Bcat].power = 10; Player[Gcat].power = 20;
+    Dog[Gdog].power = 15;
+    SB[Ocat].power = 1;
 }
-
-
